@@ -1,29 +1,48 @@
-function initiateProtocol() {
-    // 1. Sharpen the Ghost Layer
-    const ghost = document.getElementById('ghost-layer');
-    ghost.style.opacity = '0.4';
-    ghost.style.filter = 'grayscale(0%) blur(2px)';
+let currentLevel = 1;
+const terminalInput = document.getElementById('terminal-input');
+const output = document.getElementById('terminal-output');
 
-    // 2. Switch Screens
-    document.getElementById('auth-screen').classList.remove('active');
-    document.getElementById('reveal-screen').classList.add('active');
-    
-    startCountdown();
+terminalInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+        const val = this.value.toLowerCase().trim();
+        processCommand(val);
+        this.value = '';
+    }
+});
+
+function addLine(text, type = '') {
+    const p = document.createElement('p');
+    p.innerText = `> ${text}`;
+    if (type) p.className = type;
+    output.appendChild(p);
+    output.scrollTop = output.scrollHeight; // Auto-scroll
 }
 
-function startCountdown() {
-    const target = new Date("May 7, 2026 00:00:00").getTime();
-    
-    setInterval(() => {
-        const now = new Date().getTime();
-        const diff = target - now;
-        
-        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        const s = Math.floor((diff % (1000 * 60)) / 1000);
-        
-        document.getElementById('countdown').innerHTML = 
-            `T-MINUS ${d}D:${h}H:${m}M:${s}S`;
-    }, 1000);
+function processCommand(cmd) {
+    if (currentLevel === 1) {
+        if (cmd === '0705') { // Departure Date
+            addLine('LEVEL_01: ACCESS GRANTED.', 'success');
+            addLine('NEW TASK: Identifying Coordinate... What is the name of our favorite breakfast spot in Mumbai?', 'hint');
+            currentLevel = 2;
+        } else {
+            addLine('ACCESS DENIED. INCORRECT_KEY.', 'error');
+        }
+    } 
+    else if (currentLevel === 2) {
+        if (cmd.includes('dosa') || cmd.includes('idli')) { // Or whatever your spot is
+            addLine('LEVEL_02: COORDINATE LOCKED.', 'success');
+            addLine('FINAL TASK: Enter the "Revolution" secret password...', 'hint');
+            currentLevel = 3;
+        } else {
+            addLine('DATA MISMATCH. RETRY.', 'error');
+        }
+    }
+    else if (currentLevel === 3) {
+        if (cmd === 'revolution') {
+            addLine('ALL SYSTEMS GO. INITIATING REVEAL...', 'success');
+            setTimeout(initiateProtocol, 1500); // Calls your existing reveal function
+        } else {
+            addLine('UNAUTHORIZED. CHECK GROUP CREDENTIALS.', 'error');
+        }
+    }
 }
