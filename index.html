@@ -3,24 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SYSTEM_ACCESS_V2.0</title>
+    <title>VIP_ACCESS_PORTAL</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;500&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Audio Elements -->
+    <audio id="beep" src="https://www.soundjay.com/buttons/sounds/beep-07.mp3"></audio>
+    <audio id="reveal-music" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+
     <div id="ghost-layer" class="ghost-layer"></div>
 
     <div id="flight-reveal" class="globe-animation">
         <div class="plane-icon">✈️</div>
-        <p class="status-load">CALCULATING TRAJECTORY...</p>
+        <p class="status-load" id="loader-text">DECRYPTING COORDINATES...</p>
     </div>
 
     <div class="container">
+        <!-- TERMINAL -->
         <section id="auth-screen" class="active">
             <div class="terminal-window">
                 <div id="terminal-output">
-                    <p class="success">> SESSION START: JILL_BHANSALI</p>
-                    <p>> TASK: IDENTITY_VERIFICATION_REQUIRED</p>
+                    <p class="success">> PROTOCOL: BIRTHDAY_SURPRISE_V3.0</p>
+                    <p>> USER_IDENTIFIED: JILL BHANSALI</p>
                     <p class="hint">Q1: Departure date? (DDMM)</p>
                 </div>
                 <div class="input-line">
@@ -30,40 +35,41 @@
             </div>
         </section>
 
+        <!-- REVEAL -->
         <section id="reveal-screen">
             <div class="boarding-pass">
                 <header>
-                    <span>FLIGHT STATUS: CONFIRMED</span>
-                    <span>MAY 07, 2026</span>
+                    <span style="color:var(--gold)">BEYOND_BORDERS</span>
+                    <span>MAY 07 - MAY 11</span>
                 </header>
                 
                 <div class="main-reveal">
                     <h1>BALI</h1>
-                    <p class="location-tag">ULUWATU // INDONESIA</p>
+                    <p class="location-tag">ULUWATU // SAVAYA</p>
                 </div>
 
                 <div class="timer-box">
-                    <p id="countdown">00D:00H:00M:00S</p>
+                    <p id="countdown">T-MINUS 00D:00H:00M:00S</p>
                 </div>
 
                 <div class="itinerary">
                     <div class="day-card">
-                        <span>THUR MAY 07 | BIRTHDAY</span>
-                        <p>BOM ✈️ DPS // Check-in Uluwatu<br>Sundowner & Party @ Savaya Bali</p>
+                        <span>THU MAY 07 | THE ARRIVAL</span>
+                        <p>BOM ✈️ DPS // Luxury Check-in<br>Sundowner Party @ Savaya Bali</p>
                     </div>
                     <div class="day-card">
-                        <span>FRI MAY 08 - SUN MAY 10</span>
-                        <p>Private Yacht // Uluwatu Temple // Beach Days<br>[COMPLETE ITINERARY ENCRYPTED]</p>
+                        <span>MAY 08 - MAY 10 | THE ISLAND</span>
+                        <p>Private Yacht Day // Uluwatu Temple<br>Oceanfront Bliss [ENCRYPTED]</p>
                     </div>
                     <div class="day-card">
-                        <span>MON MAY 11 | DEPARTURE</span>
-                        <p>Final Balinese Breakfast // DPS ✈️ BOM</p>
+                        <span>MON MAY 11 | RETURN</span>
+                        <p>Final Sunrise // DPS ✈️ BOM</p>
                     </div>
                 </div>
 
                 <footer>
-                    <p>PASSENGER: JILL BHANSALI</p>
-                    <p class="small">MISSION COMPLETE. PACK YOUR BAGS.</p>
+                    <p>MISSION STATUS: SUCCESSFUL</p>
+                    <p class="small">PREPARE FOR DEPARTURE, JILL.</p>
                 </footer>
             </div>
         </section>
@@ -83,6 +89,7 @@
         const terminalInput = document.getElementById('terminal-input');
         const output = document.getElementById('terminal-output');
         const ghost = document.getElementById('ghost-layer');
+        const beep = document.getElementById('beep');
 
         document.addEventListener('click', () => terminalInput.focus());
 
@@ -91,6 +98,7 @@
                 const val = this.value.toLowerCase().trim();
                 if (val !== "") processStep(val);
                 this.value = '';
+                beep.play();
             }
         });
 
@@ -113,26 +121,26 @@
                 if (navigator.vibrate) navigator.vibrate(20); 
                 step++;
                 if (step < QUESTIONS.length) {
-                    addLine(`AUTH_STEP_${step}_COMPLETE.`, 'success');
+                    addLine(`SECURE_LEVEL_${step}_UNLOCKED.`, 'success');
                     addLine(QUESTIONS[step].q, 'hint');
                 } else {
                     startRevealSequence();
                 }
             } else {
-                addLine('INVALID_CREDENTIALS. RETRY.', 'error');
+                addLine('ACCESS_DENIED. TRY AGAIN.', 'error');
                 if (navigator.vibrate) navigator.vibrate([50, 50, 50]);
             }
         }
 
         function triggerGoaFakeout() {
             addLine('yes', 'user-input');
-            addLine('DESTINATION_CONFIRMED: GOA, INDIA', 'success');
+            addLine('DESTINATION: GOA (ECONOMY_MODE)', 'success');
             setTimeout(() => {
-                addLine('CRITICAL_ERROR: LACK_OF_EXCITEMENT_DETECTED', 'error');
-                addLine('OVERRIDING_COORDINATES...', 'blink');
+                addLine('ERROR: JILL_DESERVES_BETTER...', 'error');
+                addLine('RECALIBRATING_GPS...', 'blink');
                 if (navigator.vibrate) navigator.vibrate(500); 
                 setTimeout(() => {
-                    addLine('UPGRADING_TO_INTERNATIONAL_PROTOCOL...', 'success');
+                    addLine('UPGRADING_TO_ELITE_PROTOCOL...', 'success');
                     addLine(QUESTIONS[5].q, 'hint');
                     step = 5; 
                 }, 2000);
@@ -140,25 +148,31 @@
         }
 
         function startRevealSequence() {
-            addLine('ALL SYSTEMS GO. INITIATING REVEAL...', 'success');
-            if (navigator.vibrate) navigator.vibrate([100, 100, 100, 300, 100, 500]);
+            addLine('VALIDATION_COMPLETE.', 'success');
+            addLine('INITIATING_GLOBAL_SYNC...', 'success');
+            if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 300]);
 
             setTimeout(() => {
                 document.getElementById('flight-reveal').style.display = 'flex';
-            }, 1000);
+                // Matrix effect loader text
+                let counter = 0;
+                const loader = document.getElementById('loader-text');
+                const interval = setInterval(() => {
+                    const codes = ["SYNCING_ULU...", "LOCKING_SAVAYA...", "BOOKING_YACHT...", "REVEALING_BALI..."];
+                    loader.innerText = codes[counter % codes.length];
+                    counter++;
+                }, 800);
 
-            setTimeout(() => {
-                document.getElementById('flight-reveal').style.display = 'none';
-                
-                // MAP REVEAL LOGIC
-                ghost.style.backgroundImage = "url('https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?q=80&w=2000')";
-                ghost.style.opacity = '0.3'; // Increased for visibility
-                ghost.style.filter = 'grayscale(100%) contrast(120%)';
-                
-                document.getElementById('auth-screen').classList.remove('active');
-                document.getElementById('reveal-screen').classList.add('active');
-                startTimer();
-            }, 4500);
+                setTimeout(() => {
+                    clearInterval(interval);
+                    document.getElementById('flight-reveal').style.display = 'none';
+                    document.body.classList.add('revealed');
+                    document.getElementById('reveal-music').play();
+                    document.getElementById('auth-screen').classList.remove('active');
+                    document.getElementById('reveal-screen').classList.add('active');
+                    startTimer();
+                }, 5000);
+            }, 1500);
         }
 
         function startTimer() {
