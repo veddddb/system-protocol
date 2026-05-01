@@ -14,12 +14,19 @@
     <div class="container" id="app-container">
         <!-- Screen 1: Terminal Access -->
         <section id="auth-screen" class="active">
-            <div class="terminal-text">
-                <p class="blink">> SYSTEM ID: JB-0507-2026</p>
-                <p>> STATUS: ENCRYPTED_PACKAGE_FOUND</p>
-            </div>
-            <button onclick="initiateProtocol()" class="btn-main">INITIATE_PROTOCOL</button>
-        </section>
+    <div class="terminal-window">
+        <div id="terminal-output">
+            <p>> SYSTEM BOOT... COMPLETE</p>
+            <p>> USER: JILL_BHANSALI</p>
+            <p>> TASK: DATA_RECOVERY_MISSION</p>
+            <p class="hint">_Hint: What is the date of our departure? (DDMM)</p>
+        </div>
+        <div class="input-line">
+            <span>></span>
+            <input type="text" id="terminal-input" autofocus autocomplete="off">
+        </div>
+    </div>
+</section>
 
         <!-- Screen 2: The Reveal & Ticket -->
         <section id="reveal-screen">
