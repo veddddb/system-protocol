@@ -1,6 +1,6 @@
 :root {
     --bg: #050505;
-    --gold: #d4af37; /* Champagne Gold */
+    --gold: #d4af37; 
     --white: #ffffff;
     --dim: #888;
 }
@@ -12,59 +12,53 @@ body, html {
     font-family: 'JetBrains Mono', monospace;
     height: 100vh;
     overflow: hidden;
+    transition: background-color 0.2s ease;
 }
 
-/* THE MAP LAYER - Starts hidden, fades in behind the pass */
+/* Flash Effect for her IG Video */
+.flash-trigger { background-color: var(--gold) !important; }
+
 .ghost-layer {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: url('https://api.maptiler.com/static/maps/darkmatter/static/115.1, -8.4,7/1000x1000.png?key=get_your_own_or_use_placeholder');
-    /* Fallback to a high-contrast Bali photo if map link breaks */
     background-image: url('https://images.unsplash.com/photo-1537996194471-e657df975ab4?q=80&w=2000');
     background-size: cover;
     background-position: center;
     opacity: 0;
-    filter: grayscale(100%) contrast(150%) brightness(50%);
+    filter: grayscale(100%) contrast(150%) brightness(40%);
     transition: opacity 3s ease, transform 12s linear;
     z-index: -1;
 }
 
-body.revealed .ghost-layer {
-    opacity: 0.4;
-    transform: scale(1.1);
-}
+body.revealed .ghost-layer { opacity: 0.4; transform: scale(1.1); }
 
-.container {
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-}
+.container { height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
 
 section { display: none; width: 100%; max-width: 450px; }
 section.active { display: block; animation: fadeInUp 0.8s forwards; }
 
-/* Luxury Terminal */
 .terminal-window {
     background: rgba(0,0,0,0.95);
     border: 1px solid #1a1a1a;
     padding: 30px;
     height: 400px;
     overflow-y: auto;
-    box-shadow: 0 0 30px rgba(0,0,0,1);
+    position: relative;
 }
 
-#terminal-output p { margin: 8px 0; font-size: 0.85rem; line-height: 1.5; }
+/* Snapshot Mode Hide */
+body.snapshot-mode .terminal-window, 
+body.snapshot-mode .share-btn { display: none !important; }
+
+#terminal-output p { margin: 8px 0; font-size: 0.85rem; }
 .success { color: var(--gold); text-shadow: 0 0 5px rgba(212, 175, 55, 0.5); }
-.error { color: #ff4444; }
 .hint { color: var(--dim); border-left: 2px solid var(--gold); padding-left: 15px; margin: 15px 0 !important; }
 
 .input-line { display: flex; align-items: center; margin-top: 20px; border-top: 1px solid #111; padding-top: 15px; }
-.cursor { color: var(--gold); margin-right: 10px; font-weight: bold; }
-#terminal-input { background: transparent; border: none; color: white; font-family: inherit; outline: none; flex: 1; font-size: 1rem; }
+.cursor { color: var(--gold); margin-right: 10px; }
+#terminal-input { background: transparent; border: none; color: white; font-family: inherit; outline: none; flex: 1; }
 
-/* Flight Animation Overlay */
+/* Flight Reveal */
 .globe-animation {
     display: none;
     position: fixed;
@@ -72,8 +66,7 @@ section.active { display: block; animation: fadeInUp 0.8s forwards; }
     background: #000; z-index: 9999;
     justify-content: center; align-items: center; flex-direction: column;
 }
-.plane-icon { font-size: 70px; filter: drop-shadow(0 0 10px var(--gold)); animation: fly 4s ease-in-out infinite; }
-.status-load { letter-spacing: 8px; margin-top: 30px; font-size: 0.7rem; color: var(--gold); text-transform: uppercase; }
+.plane-icon { font-size: 70px; filter: drop-shadow(0 0 15px var(--gold)); animation: fly 4s ease-in-out infinite; }
 
 @keyframes fly {
     0% { transform: translate(-300px, 150px) rotate(40deg); opacity: 0; }
@@ -81,48 +74,29 @@ section.active { display: block; animation: fadeInUp 0.8s forwards; }
     100% { transform: translate(300px, -150px) rotate(40deg); opacity: 0; }
 }
 
-/* GLASSMORPHISM BOARDING PASS */
+/* Boarding Pass */
 .boarding-pass {
     border: 1px solid rgba(212, 175, 55, 0.4);
     padding: 40px 30px;
-    background: rgba(10, 10, 10, 0.7);
+    background: rgba(10, 10, 10, 0.75);
     backdrop-filter: blur(25px);
     text-align: center;
-    box-shadow: 0 0 60px rgba(0,0,0,1);
 }
 
 .main-reveal h1 { 
-    font-size: 4rem; 
-    letter-spacing: 15px; 
-    margin: 15px 0; 
-    color: var(--gold);
-    text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+    font-size: 4rem; letter-spacing: 15px; margin: 15px 0; color: var(--gold);
+    animation: pulseGlow 2s infinite;
 }
 
-.location-tag { color: var(--dim); letter-spacing: 6px; font-size: 0.8rem; }
-
-.timer-box { 
-    margin: 35px 0; padding: 20px; 
-    border: 1px solid rgba(212, 175, 55, 0.2); 
-    background: rgba(212, 175, 55, 0.03); 
+@keyframes pulseGlow {
+    0%, 100% { text-shadow: 0 0 15px rgba(212, 175, 55, 0.4); }
+    50% { text-shadow: 0 0 40px rgba(212, 175, 55, 0.8); }
 }
 
-#countdown { font-size: 1.2rem; letter-spacing: 3px; color: var(--white); }
-
-.itinerary { margin-top: 35px; display: flex; flex-direction: column; gap: 15px; }
-.day-card {
-    text-align: left; border-left: 2px solid var(--gold); padding: 12px 20px;
-    background: linear-gradient(90deg, rgba(212, 175, 55, 0.05), transparent);
+.share-btn {
+    background: transparent; border: 1px solid var(--gold); color: var(--gold);
+    padding: 10px 20px; margin-top: 25px; font-size: 0.6rem; letter-spacing: 2px;
+    cursor: pointer; display: none;
 }
-.day-card span { font-size: 0.65rem; color: var(--gold); letter-spacing: 2px; font-weight: bold; }
-.day-card p { font-size: 0.9rem; margin: 6px 0 0 0; line-height: 1.6; color: #eee; }
 
-footer { margin-top: 35px; padding-top: 25px; border-top: 1px solid #222; }
-.small { color: var(--dim); margin-top: 8px; font-size: 0.7rem; letter-spacing: 2px; }
-
-@keyframes fadeInUp { 
-    from { opacity: 0; transform: translateY(30px); } 
-    to { opacity: 1; transform: translateY(0); } 
-}
-.blink { animation: blinker 0.6s linear infinite; }
-@keyframes blinker { 50% { opacity: 0; } }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; } }
