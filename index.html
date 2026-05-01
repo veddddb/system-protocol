@@ -3,36 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SYSTEM_ACCESS_V2</title>
+    <title>SYSTEM_ACCESS_V2.0</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;500&display=swap" rel="stylesheet">
-    <style>
-        /* Animation for the flight reveal */
-        .globe-animation {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: #000;
-            z-index: 100;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-        .plane-icon { font-size: 50px; animation: fly 3s linear infinite; }
-        @keyframes fly {
-            0% { transform: translate(-150px, 50px) rotate(45deg); opacity: 0; }
-            50% { opacity: 1; }
-            100% { transform: translate(150px, -50px) rotate(45deg); opacity: 0; }
-        }
-    </style>
 </head>
 <body>
+    <!-- The Background Layer -->
     <div id="ghost-layer" class="ghost-layer"></div>
 
     <!-- REVEAL ANIMATION OVERLAY -->
     <div id="flight-reveal" class="globe-animation">
         <div class="plane-icon">✈️</div>
-        <p style="letter-spacing: 5px; margin-top: 20px;">CALCULATING TRAJECTORY...</p>
+        <p class="status-load">CALCULATING TRAJECTORY...</p>
     </div>
 
     <div class="container">
@@ -42,7 +24,7 @@
                 <div id="terminal-output">
                     <p class="success">> SESSION START: JILL_BHANSALI</p>
                     <p>> TASK: IDENTITY_VERIFICATION_REQUIRED</p>
-                    <p class="hint">Q1: What is the date of our departure? (DDMM)</p>
+                    <p class="hint">Q1: Departure date? (DDMM)</p>
                 </div>
                 <div class="input-line">
                     <span class="cursor">></span>
@@ -51,20 +33,38 @@
             </div>
         </section>
 
-        <!-- FINAL BOARDING PASS -->
+        <!-- FINAL REVEAL SCREEN -->
         <section id="reveal-screen">
             <div class="boarding-pass">
                 <header>
                     <span>FLIGHT STATUS: CONFIRMED</span>
                     <span>MAY 07, 2026</span>
                 </header>
+                
                 <div class="main-reveal">
                     <h1>BALI</h1>
                     <p class="location-tag">ULUWATU // INDONESIA</p>
                 </div>
+
                 <div class="timer-box">
                     <p id="countdown">00D:00H:00M:00S</p>
                 </div>
+
+                <div class="itinerary">
+                    <div class="day-card">
+                        <span>THUR MAY 07 | BIRTHDAY</span>
+                        <p>BOM ✈️ DPS // Check-in Uluwatu<br>Sundowner & Party @ Savaya Bali</p>
+                    </div>
+                    <div class="day-card">
+                        <span>FRI MAY 08 - SUN MAY 10</span>
+                        <p>Private Yacht // Uluwatu Temple // Beach Days<br>[COMPLETE ITINERARY ENCRYPTED]</p>
+                    </div>
+                    <div class="day-card">
+                        <span>MON MAY 11 | DEPARTURE</span>
+                        <p>Final Balinese Breakfast // DPS ✈️ BOM</p>
+                    </div>
+                </div>
+
                 <footer>
                     <p>PASSENGER: JILL BHANSALI</p>
                     <p class="small">MISSION COMPLETE. PACK YOUR BAGS.</p>
@@ -100,15 +100,22 @@
 
         function addLine(text, type = '') {
             const p = document.createElement('p');
-            p.innerText = text.startsWith('Q') ? text : `> ${text}`;
+            p.innerText = text.startsWith('Q') || text.startsWith('FINAL') ? text : `> ${text}`;
             if (type) p.className = type;
             output.appendChild(p);
             document.querySelector('.terminal-window').scrollTop = 9999;
         }
 
         function processStep(val) {
+            // Q5 Misdirection
+            if (step === 4 && val === "yes") {
+                triggerGoaFakeout();
+                return;
+            }
+
             if (val === QUESTIONS[step].a) {
                 addLine(val, 'user-input');
+                if (navigator.vibrate) navigator.vibrate(20); 
                 step++;
                 if (step < QUESTIONS.length) {
                     addLine(`AUTH_STEP_${step}_COMPLETE.`, 'success');
@@ -118,22 +125,38 @@
                 }
             } else {
                 addLine('INVALID_CREDENTIALS. RETRY.', 'error');
+                if (navigator.vibrate) navigator.vibrate([50, 50, 50]);
             }
+        }
+
+        function triggerGoaFakeout() {
+            addLine('yes', 'user-input');
+            addLine('DESTINATION_CONFIRMED: GOA, INDIA', 'success');
+            addLine('GENERATING_ECONOMY_TICKET...', 'hint');
+            setTimeout(() => {
+                addLine('CRITICAL_ERROR: LACK_OF_EXCITEMENT_DETECTED', 'error');
+                addLine('OVERRIDING_COORDINATES...', 'blink');
+                if (navigator.vibrate) navigator.vibrate(500); 
+                setTimeout(() => {
+                    addLine('UPGRADING_TO_INTERNATIONAL_PROTOCOL...', 'success');
+                    addLine(QUESTIONS[5].q, 'hint');
+                    step = 5; 
+                }, 2000);
+            }, 1500);
         }
 
         function startRevealSequence() {
             addLine('ALL SYSTEMS GO. INITIATING REVEAL...', 'success');
-            
-            // Show Flight Animation
+            if (navigator.vibrate) navigator.vibrate([100, 100, 100, 300, 100, 500]);
+
             setTimeout(() => {
                 document.getElementById('flight-reveal').style.display = 'flex';
             }, 1000);
 
-            // Show Final Ticket
             setTimeout(() => {
                 document.getElementById('flight-reveal').style.display = 'none';
                 ghost.style.opacity = '0.6';
-                ghost.style.filter = 'grayscale(0%) blur(2px)';
+                ghost.style.filter = 'grayscale(0%) blur(0px)';
                 document.getElementById('auth-screen').classList.remove('active');
                 document.getElementById('reveal-screen').classList.add('active');
                 startTimer();
