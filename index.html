@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SYSTEM_ACCESS</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- The Ghost Layer: A subtle background image -->
+    <div id="ghost-layer" class="ghost-layer"></div>
+
+    <div class="container" id="app-container">
+        <!-- Screen 1: Terminal Access -->
+        <section id="auth-screen" class="active">
+            <div class="terminal-text">
+                <p class="blink">> SYSTEM ID: JB-0507-2026</p>
+                <p>> STATUS: ENCRYPTED_PACKAGE_FOUND</p>
+            </div>
+            <button onclick="initiateProtocol()" class="btn-main">INITIATE_PROTOCOL</button>
+        </section>
+
+        <!-- Screen 2: The Reveal & Ticket -->
+        <section id="reveal-screen">
+            <div class="boarding-pass">
+                <header>
+                    <span class="logo">DESTINATION: UNLOCKED</span>
+                    <span class="date">MAY 07-11</span>
+                </header>
+                <div class="main-reveal">
+                    <h1>BALI</h1>
+                    <p class="location-tag">Uluwatu // Savaya</p>
+                </div>
+                <div class="timer-box">
+                    <p id="countdown">CALCULATING_TIME_TO_DEPARTURE...</p>
+                </div>
+                <footer>
+                    <p>HOLDER: JILL BHANSALI</p>
+                    <p class="small">ACCESS GRANTED BY: V.A.B.</p>
+                </footer>
+            </div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
