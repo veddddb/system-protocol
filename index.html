@@ -3,53 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SYSTEM_ACCESS</title>
+    <title>SYSTEM_ACCESS_V2</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;500&display=swap" rel="stylesheet">
+    <style>
+        /* Animation for the flight reveal */
+        .globe-animation {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #000;
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .plane-icon { font-size: 50px; animation: fly 3s linear infinite; }
+        @keyframes fly {
+            0% { transform: translate(-150px, 50px) rotate(45deg); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translate(150px, -50px) rotate(45deg); opacity: 0; }
+        }
+    </style>
 </head>
 <body>
-    <!-- The Ghost Layer: A subtle background image -->
     <div id="ghost-layer" class="ghost-layer"></div>
 
-    <div class="container" id="app-container">
-        <!-- Screen 1: Terminal Access -->
-        <section id="auth-screen" class="active">
-    <div class="terminal-window">
-        <div id="terminal-output">
-            <p>> SYSTEM BOOT... COMPLETE</p>
-            <p>> USER: JILL_BHANSALI</p>
-            <p>> TASK: DATA_RECOVERY_MISSION</p>
-            <p class="hint">_Hint: What is the date of our departure? (DDMM)</p>
-        </div>
-        <div class="input-line">
-            <span>></span>
-            <input type="text" id="terminal-input" autofocus autocomplete="off">
-        </div>
+    <!-- REVEAL ANIMATION OVERLAY -->
+    <div id="flight-reveal" class="globe-animation">
+        <div class="plane-icon">✈️</div>
+        <p style="letter-spacing: 5px; margin-top: 20px;">CALCULATING TRAJECTORY...</p>
     </div>
-</section>
 
-        <!-- Screen 2: The Reveal & Ticket -->
+    <div class="container">
+        <!-- TERMINAL SCREEN -->
+        <section id="auth-screen" class="active">
+            <div class="terminal-window">
+                <div id="terminal-output">
+                    <p class="success">> SESSION START: JILL_BHANSALI</p>
+                    <p>> TASK: IDENTITY_VERIFICATION_REQUIRED</p>
+                    <p class="hint">Q1: What is the date of our departure? (DDMM)</p>
+                </div>
+                <div class="input-line">
+                    <span class="cursor">></span>
+                    <input type="text" id="terminal-input" autofocus autocomplete="off" spellcheck="false">
+                </div>
+            </div>
+        </section>
+
+        <!-- FINAL BOARDING PASS -->
         <section id="reveal-screen">
             <div class="boarding-pass">
                 <header>
-                    <span class="logo">DESTINATION: UNLOCKED</span>
-                    <span class="date">MAY 07-11</span>
+                    <span>FLIGHT STATUS: CONFIRMED</span>
+                    <span>MAY 07, 2026</span>
                 </header>
                 <div class="main-reveal">
                     <h1>BALI</h1>
-                    <p class="location-tag">Uluwatu // Savaya</p>
+                    <p class="location-tag">ULUWATU // INDONESIA</p>
                 </div>
                 <div class="timer-box">
-                    <p id="countdown">CALCULATING_TIME_TO_DEPARTURE...</p>
+                    <p id="countdown">00D:00H:00M:00S</p>
                 </div>
                 <footer>
-                    <p>HOLDER: JILL BHANSALI</p>
-                    <p class="small">ACCESS GRANTED BY: V.A.B.</p>
+                    <p>PASSENGER: JILL BHANSALI</p>
+                    <p class="small">MISSION COMPLETE. PACK YOUR BAGS.</p>
                 </footer>
             </div>
         </section>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        const QUESTIONS = [
+            { q: "Q1: Departure date? (DDMM)", a: "0705" },
+            { q: "Q2: The dish I keep ordering but you hate it?", a: "wok" },
+            { q: "Q3: Enter your favorite movie...", a: "kkkg" },
+            { q: "Q4: Our car number?", a: "6259" },
+            { q: "Q5: Are we really going to Goa? (Yes/No)", a: "no" },
+            { q: "FINAL: Choose (A) Out of Mumbai or (B) Out of India", a: "b" }
+        ];
+
+        let step = 0;
+        const terminalInput = document.getElementById('terminal-input');
+        const output = document.getElementById('terminal-output');
+        const ghost = document.getElementById('ghost-layer');
+
+        document.addEventListener('click', () => terminalInput.focus());
+
+        terminalInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const val = this.value.toLowerCase().trim();
+                if (val !== "") processStep(val);
+                this.value = '';
+            }
+        });
+
+        function addLine(text, type = '') {
+            const p = document.createElement('p');
+            p.innerText = text.startsWith('Q') ? text : `> ${text}`;
+            if (type) p.className = type;
+            output.appendChild(p);
+            document.querySelector('.terminal-window').scrollTop = 9999;
+        }
+
+        function processStep(val) {
+            if (val === QUESTIONS[step].a) {
+                addLine(val, 'user-input');
+                step++;
+                if (step < QUESTIONS.length) {
+                    addLine(`AUTH_STEP_${step}_COMPLETE.`, 'success');
+                    addLine(QUESTIONS[step].q, 'hint');
+                } else {
+                    startRevealSequence();
+                }
+            } else {
+                addLine('INVALID_CREDENTIALS. RETRY.', 'error');
+            }
+        }
+
+        function startRevealSequence() {
+            addLine('ALL SYSTEMS GO. INITIATING REVEAL...', 'success');
+            
+            // Show Flight Animation
+            setTimeout(() => {
+                document.getElementById('flight-reveal').style.display = 'flex';
+            }, 1000);
+
+            // Show Final Ticket
+            setTimeout(() => {
+                document.getElementById('flight-reveal').style.display = 'none';
+                ghost.style.opacity = '0.6';
+                ghost.style.filter = 'grayscale(0%) blur(2px)';
+                document.getElementById('auth-screen').classList.remove('active');
+                document.getElementById('reveal-screen').classList.add('active');
+                startTimer();
+            }, 4500);
+        }
+
+        function startTimer() {
+            const target = new Date("May 7, 2026 00:00:00").getTime();
+            setInterval(() => {
+                const now = new Date().getTime();
+                const diff = target - now;
+                const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((diff % (1000 * 60)) / 1000);
+                document.getElementById('countdown').innerHTML = `T-MINUS ${d}D:${h}H:${m}M:${s}S`;
+            }, 1000);
+        }
+    </script>
 </body>
 </html>
