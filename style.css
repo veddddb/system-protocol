@@ -1,29 +1,43 @@
+/* --- Core Layout & Theme --- */
 :root {
-    --bg: #050505;
-    --accent: #ffffff;
+    --bg-color: #050505;
+    --terminal-green: #00ff41;
+    --accent-white: #ffffff;
     --text-dim: #666;
+    --border-color: #222;
+}
+
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
 }
 
 body, html {
-    margin: 0; padding: 0;
-    background: var(--bg);
-    color: var(--accent);
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-color);
+    color: var(--accent-white);
     font-family: 'JetBrains Mono', monospace;
-    overflow: hidden;
     height: 100%;
+    overflow: hidden; /* Keeps it feeling like a native app */
 }
 
-/* The Background Image */
+/* --- The Ghost Layer (Background) --- */
 .ghost-layer {
     position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* You can replace this URL with a photo of a Bali beach or Savaya */
     background: url('https://images.unsplash.com/photo-1537996194471-e657df975ab4?q=80&w=2000') center/cover no-repeat;
-    opacity: 0.05; /* Barely visible at first */
-    filter: grayscale(100%) blur(8px);
-    transition: all 2.5s ease;
+    opacity: 0.05; 
+    filter: grayscale(100%) blur(10px);
+    transition: all 3s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: -1;
 }
 
+/* --- Container & Screen Logic --- */
 .container {
     height: 100vh;
     display: flex;
@@ -32,41 +46,129 @@ body, html {
     padding: 20px;
 }
 
-section { display: none; text-align: center; width: 100%; max-width: 400px; }
-section.active { display: block; animation: fadeIn 1s forwards; }
+section {
+    display: none;
+    width: 100%;
+    max-width: 450px;
+    animation: fadeIn 0.8s ease-out forwards;
+}
 
-.btn-main {
+section.active {
+    display: block;
+}
+
+/* --- Terminal Treasure Hunt Styling --- */
+.terminal-window {
+    background: rgba(0, 0, 0, 0.9);
+    border: 1px solid var(--border-color);
+    padding: 25px;
+    border-radius: 4px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+#terminal-output p {
+    margin: 8px 0;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.input-line {
+    display: flex;
+    align-items: center;
+    margin-top: 15px;
+    border-top: 1px solid #111;
+    padding-top: 15px;
+}
+
+.cursor {
+    color: var(--terminal-green);
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+#terminal-input {
     background: transparent;
-    border: 1px solid var(--accent);
-    color: var(--accent);
-    padding: 15px 30px;
-    letter-spacing: 2px;
-    cursor: pointer;
-    margin-top: 30px;
-    transition: all 0.3s;
+    border: none;
+    color: var(--accent-white);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1rem;
+    width: 100%;
+    outline: none;
 }
 
-.btn-main:hover { background: var(--accent); color: var(--bg); }
+/* --- State-Specific Text Colors --- */
+.success { color: var(--terminal-green); font-weight: bold; }
+.error { color: #ff3e3e; }
+.hint { color: var(--text-dim); font-style: italic; margin-top: 10px !important; border-left: 2px solid #333; padding-left: 10px; }
+.blink { animation: blinker 1.5s linear infinite; color: var(--terminal-green); }
 
-/* Boarding Pass Styling */
+/* --- The Reveal: Boarding Pass Styling --- */
 .boarding-pass {
-    border: 1px solid #333;
-    padding: 30px;
-    background: rgba(10, 10, 10, 0.8);
-    backdrop-filter: blur(10px);
+    border: 1px solid var(--accent-white);
+    padding: 40px 20px;
+    background: rgba(10, 10, 10, 0.7);
+    backdrop-filter: blur(15px);
+    text-align: center;
+    position: relative;
 }
 
-.main-reveal h1 {
-    font-size: 4rem;
-    margin: 10px 0;
-    letter-spacing: 10px;
-}
-
-.timer-box {
-    border-top: 1px solid #333;
-    margin-top: 20px;
-    padding-top: 20px;
+.boarding-pass header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    border-bottom: 1px solid #333;
+    padding-bottom: 15px;
+    margin-bottom: 30px;
     color: var(--text-dim);
 }
 
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.main-reveal h1 {
+    font-size: 4.5rem;
+    margin: 0;
+    letter-spacing: 12px;
+    font-weight: 500;
+}
+
+.location-tag {
+    letter-spacing: 5px;
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    margin-top: 5px;
+}
+
+.timer-box {
+    margin: 40px 0;
+    padding: 20px;
+    border: 1px solid #222;
+}
+
+#countdown {
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+}
+
+.boarding-pass footer {
+    border-top: 1px solid #333;
+    padding-top: 20px;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+}
+
+.small { color: #444; margin-top: 5px; }
+
+/* --- Animations --- */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes blinker {
+    50% { opacity: 0; }
+}
+
+/* --- Mobile Fixes --- */
+@media (max-width: 480px) {
+    .main-reveal h1 { font-size: 3rem; letter-spacing: 6px; }
+    .boarding-pass { padding: 30px 15px; }
+}
