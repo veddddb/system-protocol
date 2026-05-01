@@ -8,17 +8,14 @@
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;500&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- The Background Layer -->
     <div id="ghost-layer" class="ghost-layer"></div>
 
-    <!-- REVEAL ANIMATION OVERLAY -->
     <div id="flight-reveal" class="globe-animation">
         <div class="plane-icon">✈️</div>
         <p class="status-load">CALCULATING TRAJECTORY...</p>
     </div>
 
     <div class="container">
-        <!-- TERMINAL SCREEN -->
         <section id="auth-screen" class="active">
             <div class="terminal-window">
                 <div id="terminal-output">
@@ -33,7 +30,6 @@
             </div>
         </section>
 
-        <!-- FINAL REVEAL SCREEN -->
         <section id="reveal-screen">
             <div class="boarding-pass">
                 <header>
@@ -107,7 +103,6 @@
         }
 
         function processStep(val) {
-            // Q5 Misdirection
             if (step === 4 && val === "yes") {
                 triggerGoaFakeout();
                 return;
@@ -132,7 +127,6 @@
         function triggerGoaFakeout() {
             addLine('yes', 'user-input');
             addLine('DESTINATION_CONFIRMED: GOA, INDIA', 'success');
-            addLine('GENERATING_ECONOMY_TICKET...', 'hint');
             setTimeout(() => {
                 addLine('CRITICAL_ERROR: LACK_OF_EXCITEMENT_DETECTED', 'error');
                 addLine('OVERRIDING_COORDINATES...', 'blink');
@@ -155,8 +149,12 @@
 
             setTimeout(() => {
                 document.getElementById('flight-reveal').style.display = 'none';
-                ghost.style.opacity = '0.6';
-                ghost.style.filter = 'grayscale(0%) blur(0px)';
+                
+                // MAP REVEAL LOGIC
+                ghost.style.backgroundImage = "url('https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?q=80&w=2000')";
+                ghost.style.opacity = '0.3'; // Increased for visibility
+                ghost.style.filter = 'grayscale(100%) contrast(120%)';
+                
                 document.getElementById('auth-screen').classList.remove('active');
                 document.getElementById('reveal-screen').classList.add('active');
                 startTimer();
