@@ -12,18 +12,15 @@ body, html {
     font-family: 'JetBrains Mono', monospace;
     height: 100vh;
     overflow: hidden;
-    transition: background-color 0.2s ease;
 }
 
-/* Flash Effect for her IG Video */
 .flash-trigger { background-color: var(--gold) !important; }
 
 .ghost-layer {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
     background-image: url('https://images.unsplash.com/photo-1537996194471-e657df975ab4?q=80&w=2000');
-    background-size: cover;
-    background-position: center;
+    background-size: cover; background-position: center;
     opacity: 0;
     filter: grayscale(100%) contrast(150%) brightness(40%);
     transition: opacity 3s ease, transform 12s linear;
@@ -41,24 +38,22 @@ section.active { display: block; animation: fadeInUp 0.8s forwards; }
     background: rgba(0,0,0,0.95);
     border: 1px solid #1a1a1a;
     padding: 30px;
-    height: 400px;
+    height: 420px;
     overflow-y: auto;
-    position: relative;
 }
 
-/* Snapshot Mode Hide */
-body.snapshot-mode .terminal-window, 
-body.snapshot-mode .share-btn { display: none !important; }
+body.snapshot-mode .terminal-window { display: none !important; }
 
 #terminal-output p { margin: 8px 0; font-size: 0.85rem; }
-.success { color: var(--gold); text-shadow: 0 0 5px rgba(212, 175, 55, 0.5); }
+.success { color: var(--gold); }
+.error { color: #ff4444; font-weight: bold; }
 .hint { color: var(--dim); border-left: 2px solid var(--gold); padding-left: 15px; margin: 15px 0 !important; }
 
 .input-line { display: flex; align-items: center; margin-top: 20px; border-top: 1px solid #111; padding-top: 15px; }
 .cursor { color: var(--gold); margin-right: 10px; }
-#terminal-input { background: transparent; border: none; color: white; font-family: inherit; outline: none; flex: 1; }
+#terminal-input { background: transparent; border: none; color: white; font-family: inherit; outline: none; flex: 1; font-size: 1rem; }
 
-/* Flight Reveal */
+/* Reveal Overlay */
 .globe-animation {
     display: none;
     position: fixed;
@@ -67,6 +62,7 @@ body.snapshot-mode .share-btn { display: none !important; }
     justify-content: center; align-items: center; flex-direction: column;
 }
 .plane-icon { font-size: 70px; filter: drop-shadow(0 0 15px var(--gold)); animation: fly 4s ease-in-out infinite; }
+.status-load { letter-spacing: 5px; margin-top: 20px; font-size: 0.7rem; color: var(--gold); }
 
 @keyframes fly {
     0% { transform: translate(-300px, 150px) rotate(40deg); opacity: 0; }
@@ -74,7 +70,7 @@ body.snapshot-mode .share-btn { display: none !important; }
     100% { transform: translate(300px, -150px) rotate(40deg); opacity: 0; }
 }
 
-/* Boarding Pass */
+/* Final Pass */
 .boarding-pass {
     border: 1px solid rgba(212, 175, 55, 0.4);
     padding: 40px 30px;
@@ -83,20 +79,22 @@ body.snapshot-mode .share-btn { display: none !important; }
     text-align: center;
 }
 
-.main-reveal h1 { 
-    font-size: 4rem; letter-spacing: 15px; margin: 15px 0; color: var(--gold);
-    animation: pulseGlow 2s infinite;
+.main-reveal h1 { font-size: 3.5rem; letter-spacing: 12px; margin: 15px 0; color: var(--gold); animation: pulseGlow 2s infinite; }
+
+.timer-box { margin: 25px 0; padding: 15px; border: 1px solid rgba(212, 175, 55, 0.2); }
+
+.day-card { text-align: left; border-left: 2px solid var(--gold); padding: 10px 15px; background: rgba(255,255,255,0.03); margin-bottom: 10px; }
+.day-card span { font-size: 0.6rem; color: var(--gold); font-weight: bold; }
+.day-card p { font-size: 0.8rem; margin: 4px 0; }
+
+.share-btn {
+    background: transparent; border: 1px solid var(--gold); color: var(--gold);
+    padding: 10px 20px; margin-top: 20px; font-size: 0.6rem; letter-spacing: 2px;
 }
 
 @keyframes pulseGlow {
     0%, 100% { text-shadow: 0 0 15px rgba(212, 175, 55, 0.4); }
-    50% { text-shadow: 0 0 40px rgba(212, 175, 55, 0.8); }
-}
-
-.share-btn {
-    background: transparent; border: 1px solid var(--gold); color: var(--gold);
-    padding: 10px 20px; margin-top: 25px; font-size: 0.6rem; letter-spacing: 2px;
-    cursor: pointer; display: none;
+    50% { text-shadow: 0 0 35px rgba(212, 175, 55, 0.7); }
 }
 
 @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; } }
