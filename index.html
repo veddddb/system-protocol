@@ -20,7 +20,7 @@
     </div>
 
     <div class="container">
-        <!-- TERMINAL -->
+        <!-- TERMINAL SCREEN -->
         <section id="auth-screen" class="active">
             <div class="terminal-window">
                 <div id="terminal-output">
@@ -35,7 +35,7 @@
             </div>
         </section>
 
-        <!-- REVEAL -->
+        <!-- REVEAL SCREEN -->
         <section id="reveal-screen">
             <div class="boarding-pass">
                 <header>
@@ -45,7 +45,7 @@
                 
                 <div class="main-reveal">
                     <h1>BALI</h1>
-                    <p class="location-tag">ULUWATU // SAVAYA</p>
+                    <p class="location-tag">ULUWATU // SEMINYAK</p>
                 </div>
 
                 <div class="timer-box">
@@ -55,20 +55,20 @@
                 <div class="itinerary">
                     <div class="day-card">
                         <span>THU MAY 07 | THE ARRIVAL</span>
-                        <p>BOM ✈️ DPS // Luxury Check-in<br>Sundowner Party @ Savaya Bali</p>
+                        <p>BOM ✈️ DPS // Luxury Private Transfer</p>
                     </div>
-                    <div class="day-card">
-                        <span>MAY 08 - MAY 10 | THE ISLAND</span>
-                        <p>Private Yacht Day // Uluwatu Temple<br>Oceanfront Bliss [ENCRYPTED]</p>
+                    <div class="day-card highlighted">
+                        <span>THE STAY | SEMINYAK</span>
+                        <p>Honeymoon Suite @ The Club Villas Seminyak</p>
                     </div>
-                    <div class="day-card">
-                        <span>MON MAY 11 | RETURN</span>
-                        <p>Final Sunrise // DPS ✈️ BOM</p>
+                    <div class="day-card highlighted">
+                        <span>BIRTHDAY SUNDOWNER | ULUWATU</span>
+                        <p>VIP Sunset Table @ El Kabron Spanish Cliff Club</p>
                     </div>
-                </div>
-
-                <div class="visualizer">
-                    <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+                    <div class="day-card secret">
+                        <span>MAY 09 - 11 | MYSTERY</span>
+                        <p>And many more surprises await... [ENCRYPTED]</p>
+                    </div>
                 </div>
 
                 <button id="snap-btn" class="share-btn" onclick="toggleSnapshot()">SNAPSHOT_MODE</button>
@@ -81,7 +81,7 @@
             { q: "Q1: Date of departure? (DDMM)", a: "0705" },
             { q: "Q2: Favourite Movie (short form)?", a: "kkkg" },
             { q: "Q3: Favourite online food which Vedant doesn't like?", a: "wok" },
-            { q: "Q4: Secret code from your 2nd most favourite person? (Guess who, call and ask!)", a: "jilly" },
+            { q: "Q4: Secret code from your 2nd most favourite person? (Call and ask!)", a: "jilly" },
             { q: "Q5: Where are we going?", a: "goa" }
         ];
 
@@ -117,7 +117,7 @@
 
             if (val === QUESTIONS[step].a) {
                 addLine(val, 'user-input');
-                if (navigator.vibrate) navigator.vibrate(20); 
+                if (navigator.vibrate) navigator.vibrate(25); 
                 step++;
                 if (step < QUESTIONS.length) {
                     addLine(`AUTH_SUCCESS_${step}.`, 'success');
@@ -151,7 +151,7 @@
             let counter = 0;
             const loader = document.getElementById('loader-text');
             const interval = setInterval(() => {
-                const codes = ["UPGRADING_TO_INTERNATIONAL...", "OVERRIDING_BOM_GOA...", "SYNCING_ULU_COORDINATES...", "LOCKING_SAVAYA..."];
+                const codes = ["UPGRADING_TO_INTERNATIONAL...", "OVERRIDING_BOM_GOA...", "SYNCING_ULU_COORDINATES...", "LOCKING_EL_KABRON..."];
                 loader.innerText = codes[counter % codes.length];
                 counter++;
             }, 800);
@@ -169,6 +169,8 @@
 
         function toggleSnapshot() {
             document.getElementById('main-body').classList.toggle('snapshot-mode');
+            const btn = document.getElementById('snap-btn');
+            btn.innerText = document.getElementById('main-body').classList.contains('snapshot-mode') ? "EXIT_SNAPSHOT" : "SNAPSHOT_MODE";
         }
 
         function startTimer() {
