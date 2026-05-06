@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>VIP_REVEAL_PROTOCOL</title>
+    <title>VIP_ACCESS_PORTAL</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;500&display=swap" rel="stylesheet">
 </head>
-<body>
+<body id="main-body">
     <audio id="beep" src="https://www.soundjay.com/buttons/sounds/beep-07.mp3"></audio>
     <audio id="reveal-music" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
 
@@ -16,7 +16,7 @@
     <!-- FLIGHT OVERLAY -->
     <div id="flight-reveal" class="globe-animation">
         <div class="plane-icon">✈️</div>
-        <p style="color:var(--gold); letter-spacing: 5px; margin-top:20px;">SYNCING_GLOBAL_GPS...</p>
+        <p class="status-load" id="loader-text">DECRYPTING COORDINATES...</p>
     </div>
 
     <div class="container">
@@ -24,8 +24,9 @@
         <section id="auth-screen" class="active">
             <div class="terminal-window">
                 <div id="terminal-output">
-                    <p class="success">> IDENTITY VERIFICATION: JILL BHANSALI</p>
-                    <p class="hint">Q1: Departure date? (DDMM)</p>
+                    <p class="success">> PROTOCOL: BIRTHDAY_SURPRISE_V4.0</p>
+                    <p>> USER_IDENTIFIED: JILL BHANSALI</p>
+                    <p class="hint">Q1: Date of departure (DDMM)</p>
                 </div>
                 <div class="input-line">
                     <span class="cursor">></span>
@@ -34,28 +35,40 @@
             </div>
         </section>
 
-        <!-- FINAL REVEAL -->
+        <!-- REVEAL -->
         <section id="reveal-screen">
-            <div class="boarding-pass" id="pass-content">
-                <header style="display:flex; justify-content:space-between; font-size:0.6rem; letter-spacing:2px; color:var(--gold);">
-                    <span>BEYOND_BORDERS</span>
-                    <span>MAY 07 - 11</span>
+            <div class="boarding-pass">
+                <header>
+                    <span style="color:var(--gold)">BEYOND_BORDERS</span>
+                    <span>MAY 07 - MAY 11</span>
                 </header>
                 
                 <div class="main-reveal">
                     <h1>BALI</h1>
-                    <p style="color:var(--dim); letter-spacing:5px; font-size:0.8rem;">ULUWATU // SAVAYA</p>
+                    <p class="location-tag">ULUWATU // SAVAYA</p>
                 </div>
 
-                <div class="timer-box"><p id="countdown">T-MINUS 00:00:00:00</p></div>
+                <div class="timer-box">
+                    <p id="countdown">T-MINUS 00D:00H:00M:00S</p>
+                </div>
 
-                <div class="itinerary" style="text-align:left; font-size:0.8rem;">
-                    <p style="border-left:1px solid var(--gold); padding-left:10px; margin-bottom:10px;">
-                        <span style="color:var(--gold); font-size:0.6rem;">DAY 01</span><br>BOM ✈️ DPS | B-Day Sundowner @ Savaya
-                    </p>
-                    <p style="border-left:1px solid var(--gold); padding-left:10px;">
-                        <span style="color:var(--gold); font-size:0.6rem;">MAY 08-11</span><br>Private Yacht // Uluwatu Temple // Beach Bliss
-                    </p>
+                <div class="itinerary">
+                    <div class="day-card">
+                        <span>THU MAY 07 | THE ARRIVAL</span>
+                        <p>BOM ✈️ DPS // Luxury Check-in<br>Sundowner Party @ Savaya Bali</p>
+                    </div>
+                    <div class="day-card">
+                        <span>MAY 08 - MAY 10 | THE ISLAND</span>
+                        <p>Private Yacht Day // Uluwatu Temple<br>Oceanfront Bliss [ENCRYPTED]</p>
+                    </div>
+                    <div class="day-card">
+                        <span>MON MAY 11 | RETURN</span>
+                        <p>Final Sunrise // DPS ✈️ BOM</p>
+                    </div>
+                </div>
+
+                <div class="visualizer">
+                    <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
                 </div>
 
                 <button id="snap-btn" class="share-btn" onclick="toggleSnapshot()">SNAPSHOT_MODE</button>
@@ -65,12 +78,11 @@
 
     <script>
         const QUESTIONS = [
-            { q: "Q1: Departure date? (DDMM)", a: "0705" },
-            { q: "Q2: The dish I keep ordering but you hate it?", a: "wok" },
-            { q: "Q3: Enter your favorite movie...", a: "kkkg" },
-            { q: "Q4: Our car number?", a: "6259" },
-            { q: "Q5: Are we really going to Goa? (Yes/No)", a: "no" },
-            { q: "FINAL: Choose (A) Out of Mumbai or (B) Out of India", a: "b" }
+            { q: "Q1: Date of departure? (DDMM)", a: "0705" },
+            { q: "Q2: Favourite Movie (short form)?", a: "kkkg" },
+            { q: "Q3: Favourite online food which Vedant doesn't like?", a: "wok" },
+            { q: "Q4: Secret code from your 2nd most favourite person? (Guess who, call and ask!)", a: "jilly" },
+            { q: "Q5: Where are we going?", a: "goa" }
         ];
 
         let step = 0;
@@ -91,74 +103,72 @@
 
         function addLine(text, type = '') {
             const p = document.createElement('p');
-            p.innerText = text.startsWith('Q') || text.startsWith('FINAL') ? text : `> ${text}`;
+            p.innerText = text.startsWith('Q') ? text : `> ${text}`;
             if (type) p.className = type;
             output.appendChild(p);
-            document.querySelector('.terminal-window').scrollTop = 999;
+            document.querySelector('.terminal-window').scrollTop = 9999;
         }
 
         function processStep(val) {
-            if (step === 4 && val === "yes") {
-                triggerGoaFakeout(); return;
+            if (step === 4 && val === "goa") {
+                triggerGoaError();
+                return;
             }
+
             if (val === QUESTIONS[step].a) {
                 addLine(val, 'user-input');
-                if (navigator.vibrate) navigator.vibrate(30); 
+                if (navigator.vibrate) navigator.vibrate(20); 
                 step++;
                 if (step < QUESTIONS.length) {
-                    addLine(`AUTH_SUCCESS_LVL_${step}.`, 'success');
+                    addLine(`AUTH_SUCCESS_${step}.`, 'success');
                     addLine(QUESTIONS[step].q, 'hint');
-                } else {
-                    startRevealSequence();
                 }
             } else {
-                addLine('ACCESS_DENIED.', 'error');
+                addLine('ACCESS_DENIED. RETRY.', 'error');
                 if (navigator.vibrate) navigator.vibrate([50, 50, 50]);
             }
         }
 
-        function triggerGoaFakeout() {
-            addLine('yes', 'user-input');
-            addLine('DESTINATION: GOA...', 'success');
+        function triggerGoaError() {
+            addLine('goa', 'user-input');
+            addLine('CRITICAL_SYSTEM_ERROR: DESTINATION_NOT_COMPATIBLE', 'error');
+            
             setTimeout(() => {
-                addLine('ERROR: UPGRADE_REQUIRED', 'error');
-                if (navigator.vibrate) navigator.vibrate(500); 
+                document.getElementById('main-body').classList.add('flash-trigger');
+                addLine('REASON: JILL DESERVES BETTER', 'error');
+                if (navigator.vibrate) navigator.vibrate(500);
+                
                 setTimeout(() => {
-                    addLine(QUESTIONS[5].q, 'hint');
-                    step = 5; 
+                    document.getElementById('main-body').classList.remove('flash-trigger');
+                    startRevealSequence();
                 }, 1500);
             }, 1000);
         }
 
         function startRevealSequence() {
-            addLine('VALIDATION_COMPLETE. INITIATING_FLASH...', 'success');
+            document.getElementById('flight-reveal').style.display = 'flex';
             
-            setTimeout(() => {
-                // THE FACE-LIGHT FLASH
-                document.body.classList.add('flash-trigger');
-                document.getElementById('flight-reveal').style.display = 'flex';
-                
-                setTimeout(() => {
-                    document.body.classList.remove('flash-trigger');
-                    document.getElementById('flight-reveal').style.display = 'none';
-                    document.body.classList.add('revealed');
-                    document.getElementById('reveal-music').play();
-                    document.getElementById('auth-screen').classList.remove('active');
-                    document.getElementById('reveal-screen').classList.add('active');
-                    
-                    setTimeout(() => {
-                        document.getElementById('snap-btn').style.display = 'inline-block';
-                    }, 3000);
+            let counter = 0;
+            const loader = document.getElementById('loader-text');
+            const interval = setInterval(() => {
+                const codes = ["UPGRADING_TO_INTERNATIONAL...", "OVERRIDING_BOM_GOA...", "SYNCING_ULU_COORDINATES...", "LOCKING_SAVAYA..."];
+                loader.innerText = codes[counter % codes.length];
+                counter++;
+            }, 800);
 
-                    startTimer();
-                }, 5000);
-            }, 1000);
+            setTimeout(() => {
+                clearInterval(interval);
+                document.getElementById('flight-reveal').style.display = 'none';
+                document.getElementById('main-body').classList.add('revealed');
+                document.getElementById('reveal-music').play();
+                document.getElementById('auth-screen').classList.remove('active');
+                document.getElementById('reveal-screen').classList.add('active');
+                startTimer();
+            }, 5000);
         }
 
         function toggleSnapshot() {
-            document.body.classList.toggle('snapshot-mode');
-            const btn = document.getElementById('snap-btn');
-            btn.innerText = document.body.classList.contains('snapshot-mode') ? "EXIT_SNAPSHOT" : "SNAPSHOT_MODE";
+            document.getElementById('main-body').classList.toggle('snapshot-mode');
         }
 
         function startTimer() {
